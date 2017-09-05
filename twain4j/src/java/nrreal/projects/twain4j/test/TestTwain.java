@@ -1,6 +1,5 @@
 package nrreal.projects.twain4j.test;
 
-import java.io.IOException;
 import org.omg.CORBA.SystemException;
 
 /**
