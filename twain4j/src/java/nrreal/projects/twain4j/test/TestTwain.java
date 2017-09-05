@@ -1,5 +1,8 @@
 package nrreal.projects.twain4j.test;
 
+import java.io.IOException;
+import org.omg.CORBA.SystemException;
+
 /**
  *
  * @author theboshy
@@ -15,10 +18,16 @@ public class TestTwain {
         String wow64Arch = System.getenv("PROCESSOR_ARCHITEW6432");
         String realArch = arch.endsWith("32") || wow64Arch != null && wow64Arch.endsWith("32") ? "32" : "64";
         if (System.getProperty("os.name").startsWith("windows")) {
-            if (realArch.equals(ARCHITECTURE_X32)) {
-                System.load(LIB_X32);
-            } else {
-                System.load(LIB_X64);
+            try {
+                if (realArch.equals(ARCHITECTURE_X32)) {
+                    System.load(LIB_X32);
+                    System.out.println("cargada lib twain x32 ");
+                } else {
+                    System.load(LIB_X64);
+                    System.out.println("cargada lib twain x64 ");
+                }
+            } catch (SystemException e) {
+                System.out.println(e.getMessage());
             }
         }
     }
