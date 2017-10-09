@@ -28,7 +28,7 @@ public class ScannerTest implements ScannerListener {
         scanner.acquire();*/
 
             if (scanner == null) {
-                System.out.println("no se obtuve control sobre el controlador");
+                System.out.println("no se obtuvo recursos desde el controlador");
             } else {
                 JOptionPane.showMessageDialog(null, "Devices : " + scanner.getDeviceNames().length);
                 if (scanner.getDeviceNames().length >= 1) {
