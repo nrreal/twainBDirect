@@ -81,7 +81,7 @@ namespace Rextester
            Rextester.Program nb = new Rextester.Program();
 foreach (string pc in nb.getNetworkComputers())
 {
-     Console.WriteLine(pc);
+      System.Console.WriteLine(pc);
 }
         }
         
