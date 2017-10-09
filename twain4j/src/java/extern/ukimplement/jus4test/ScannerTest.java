@@ -20,23 +20,27 @@ public class ScannerTest implements ScannerListener {
 
     public ScannerTest(String[] argv) throws ScannerIOException {
         scanner = Scanner.getDevice();
-        scanner.addListener(this);
-        /*scanner.select();
+        if (!scanner.isAPIInstalled()) {
+            JOptionPane.showMessageDialog(null, "No se encuentra instalado el DMS para TWAIN \n por favor instale twainapp.win[x32?x64].installer.msi", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            scanner.addListener(this);
+            /*scanner.select();
         scanner.acquire();*/
 
-        if (scanner == null) {
-            System.out.println("no se obtuve control sobre el controlador");
-        } else {
-            JOptionPane.showMessageDialog(null, "Devices : " + scanner.getDeviceNames().length);
-            if (scanner.getDeviceNames().length >= 1) {
-                for (String deviceName : scanner.getDeviceNames()) {
-                    JOptionPane.showMessageDialog(null, deviceName);
-                    //System.out.println(deviceName);
+            if (scanner == null) {
+                System.out.println("no se obtuve control sobre el controlador");
+            } else {
+                JOptionPane.showMessageDialog(null, "Devices : " + scanner.getDeviceNames().length);
+                if (scanner.getDeviceNames().length >= 1) {
+                    for (String deviceName : scanner.getDeviceNames()) {
+                        JOptionPane.showMessageDialog(null, deviceName);
+                        //System.out.println(deviceName);
+                    }
                 }
             }
+            scanner.waitToExit();
+            //--
         }
-        //scanner.waitToExit();
-        //--
     }
 
     @Override
@@ -78,7 +82,7 @@ public class ScannerTest implements ScannerListener {
     }
 
     public static void main(String[] argv) {
-         JOptionPane.showMessageDialog(null, "Search Scanner Devices");
+        JOptionPane.showMessageDialog(null, "Search Scanner Devices");
         try {
             app = new ScannerTest(argv);
         } catch (ScannerIOException e) {
