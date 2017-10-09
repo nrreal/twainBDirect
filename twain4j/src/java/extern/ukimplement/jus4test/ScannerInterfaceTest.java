@@ -12,10 +12,10 @@ import uk.co.mmscomputing.device.scanner.ScannerListener;
 import javax.swing.WindowConstants;
 
 /**
- *
+ *@deprecated 
  * @author theboshy
  */
-public class ScannerMain extends JFrame implements ScannerListener {
+public class ScannerInterfaceTest extends JFrame implements ScannerListener {
 
     private static final long serialVersionUID = 1L;
     private JPanel jContentPane = null;
@@ -24,15 +24,15 @@ public class ScannerMain extends JFrame implements ScannerListener {
     private Scanner scanner;
 
     public static void main(String[] args) {
-        new ScannerMain().setVisible(true);
+        new ScannerInterfaceTest().setVisible(true);
     }
 
     public void run(String arg0) {
 
-        new ScannerMain().setVisible(true);
+        new ScannerInterfaceTest().setVisible(true);
     }
 
-    public ScannerMain() {
+    public ScannerInterfaceTest() {
         super();
         initialize();
         try {
@@ -107,16 +107,15 @@ public class ScannerMain extends JFrame implements ScannerListener {
     }
 
     public void getScan() {
-
         try {
             scanner.acquire();
         } catch (ScannerIOException e1) {
-            System.err.println("Acceso denegado");
-
+            System.err.println("Acceso denegado"+e1.getMessage());
         }
 
     }
 
+    @Override
     public void update(ScannerIOMetadata.Type type, ScannerIOMetadata metadata) {
 
         if (type.equals(ScannerIOMetadata.ACQUIRED)) {

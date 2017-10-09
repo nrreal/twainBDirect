@@ -6,7 +6,7 @@ import org.omg.CORBA.SystemException;
  *
  * @author theboshy
  */
-public class TestTwain {
+public class LoadLibrary {
 
     private static final String LIB_X32 = "nrreal/projects/twain4j/lib/x32/";
     private static final String LIB_X64 = "nrreal/projects/twain4j/lib/x64/";
