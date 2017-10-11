@@ -48,7 +48,7 @@ public class BoshScanListener implements ScannerListener {
                 //--
 
                 System.out.println("trying to write the image");
-                if (ImageIO.write(image, OUT_PUT_TYPE, fileOutputFolder)) {
+                if (!ImageIO.write(image, OUT_PUT_TYPE, fileOutputFolder)) {
                     throw new RuntimeException("Unexpected error writing image");
                 }
                 System.out.println("image save " + PATH);
