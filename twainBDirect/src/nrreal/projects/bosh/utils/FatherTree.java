@@ -16,22 +16,30 @@ import java.util.GregorianCalendar;
  */
 public class FatherTree {
 
-    /*public static void main(String[] args) throws IOException {
-        FatherTree f = new FatherTree();
-        //System.out.println(f.getCurrentFolder());
-        createNewLogFile(f.getCurrentFolder(),"messag");
-    }*/
+    private static FatherTree instance;
 
     public FatherTree() {
 
     }
 
-    public static void createNewLogFile(String paString,String fileLogContent) throws IOException {
+    public static FatherTree getInstance() {
+        if (instance == null) {
+            instance = new FatherTree();
+        }
+        return instance;
+    }
+
+    public static void createNewLogFile(String paString, String fileLogContent) {
         java.util.Date date = GregorianCalendar.getInstance().getTime();
         SimpleDateFormat simpleDateFormatDays = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat simpleDateFormatHour = new SimpleDateFormat("HH:mm");
         //--
-        String logName = "logError" + simpleDateFormatDays.format(date) + System.currentTimeMillis() + ".txt";
-        overrideFile(paString, logName, fileLogContent);
+        String logName = "logError" + simpleDateFormatDays.format(date) + ".txt";
+        try {
+            overrideFileCustom(paString, logName, true, fileLogContent, simpleDateFormatHour.format(date) + "->");
+        } catch (IOException e) {
+            System.out.println("Intern log : " + e.getMessage());
+        }
     }
 
     /**
@@ -81,6 +89,12 @@ public class FatherTree {
         BufferedWriter bw = null;
         try {
             File archivo = new File(url + "/" + name);
+            //--
+            Path path = Paths.get(url);
+            if (!Files.exists(path)) {
+                Files.createDirectories(path);
+            }
+            //--
             bw = new BufferedWriter(new FileWriter(archivo, true));
             if (newLine) {
                 bw.newLine();
@@ -119,16 +133,31 @@ public class FatherTree {
         }
     }
 
-    private String getCurrentFolder() throws IOException {
-        String compac ="";
-        String[] pathCompleJar = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath()).getCanonicalPath().split("\\\\");
-        if(pathCompleJar!=null && pathCompleJar.length>=1){
-            pathCompleJar[pathCompleJar.length-1]="";
-            for (int runner = 0; runner < pathCompleJar.length; runner++) {
-                compac+=pathCompleJar[runner]+"/";
+    public String getCurrentFolder() {
+        String compac = "";
+        try {
+            String[] pathCompleJar = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath()).getCanonicalPath().split("\\\\");
+            if (pathCompleJar != null && pathCompleJar.length >= 1) {
+                pathCompleJar[pathCompleJar.length - 1] = "";
+                for (int runner = 0; runner < pathCompleJar.length; runner++) {
+                    compac += pathCompleJar[runner] + "/";
+                }
             }
+        } catch (IOException e) {
+            System.out.println("Intern Log : " + e.getMessage());
         }
-        return  compac+"logs\\";
+        return compac + "logs\\";
     }
 
+    public void validateFolder(File file) {
+        try {
+            Path path;
+            path = Paths.get(file.getCanonicalPath());
+            if (!Files.exists(path)) {
+                Files.createDirectories(path);
+            }
+        } catch (IOException e) {
+            System.out.println("Intern Log : " + e.getMessage());
+        }
+    }
 }

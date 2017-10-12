@@ -1,10 +1,11 @@
 package nrreal.projects.twainbdirect.app;
 
-import nrreal.projects.bosh.twainbdirect.BoshScan;
-import nrreal.projects.bosh.twainbdirect.BoshScanListener;
+import nrreal.projects.twainbdirect.bosh.BoshScan;
+import nrreal.projects.twainbdirect.bosh.BoshScanListener;
 import java.awt.HeadlessException;
 import java.awt.Rectangle;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -22,6 +23,8 @@ public class AppScannerInterface extends JFrame {
     private JButton select = null;
     private JButton scan = null;
     private Scanner scanner;
+    //--
+    private BoshScanListener boshScanListener;
 
     public static void main(String[] args) {
         new AppScannerInterface().setVisible(true);
@@ -38,7 +41,8 @@ public class AppScannerInterface extends JFrame {
             scanner = Scanner.getDevice();
             //--
             if (BoshScan.verifyAndInitComponets(scanner)) {
-                BoshScanListener boshScanListener = new BoshScanListener();
+                boshScanListener = new BoshScanListener();
+                //--
                 scanner.addListener(boshScanListener);
             } else {
                 JOptionPane.showMessageDialog(null, "No cumple con los requerimientos necesarios para \nusar twain4J", "Error", JOptionPane.ERROR_MESSAGE);
@@ -96,6 +100,21 @@ public class AppScannerInterface extends JFrame {
             scan.addActionListener(new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(java.awt.event.ActionEvent e) {
+                    //--
+                    Object formatoDeSalida = "Seleccione";
+                    //--
+                    while (String.valueOf(formatoDeSalida).equals("Seleccione")) {
+                        formatoDeSalida = JOptionPane.showInputDialog(null, "Seleccione una Opccion",
+                                "Formato De Salida", JOptionPane.QUESTION_MESSAGE, null,
+                                new Object[]{"Seleccione", "PDF", "JPG"}, "Seleccione");
+
+                        if (formatoDeSalida != null) {
+                            if (boshScanListener != null) {
+                                boshScanListener.setOutPutFormat(String.valueOf(formatoDeSalida));
+                            }
+                        }
+                    }
+                    //--
                     getScan();
                 }
             });
