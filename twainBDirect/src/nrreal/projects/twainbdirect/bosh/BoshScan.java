@@ -1,4 +1,4 @@
-package nrreal.projects.bosh.twainbdirect;
+package nrreal.projects.twainbdirect.bosh;
 
 import java.awt.Graphics2D;
 import java.io.File;
