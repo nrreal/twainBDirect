@@ -6,14 +6,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import nrreal.projects.bosh.utils.FatherTree;
 import uk.co.mmscomputing.device.scanner.ScannerDevice;
 import uk.co.mmscomputing.device.scanner.ScannerIOException;
 import uk.co.mmscomputing.device.scanner.ScannerIOMetadata;
 import uk.co.mmscomputing.device.scanner.ScannerListener;
+import uk.co.mmscomputing.device.twain.TwainConstants;
+import uk.co.mmscomputing.device.twain.TwainIOMetadata;
+import uk.co.mmscomputing.device.twain.TwainSource;
 
 /**
  *
@@ -46,9 +47,11 @@ public class BoshScanListener implements ScannerListener {
     public void update(ScannerIOMetadata.Type type, ScannerIOMetadata metadata) {
         ScannerDevice device = metadata.getDevice();
         try {
+            //--caps
             device.setShowUserInterface(false);
+            device.setResolution(300);
         } catch (ScannerIOException ex) {
-            System.out.println("error"+ex.getMessage());
+            System.out.println("error" + ex.getMessage());
         }
         //--
         if (type.equals(ScannerIOMetadata.ACQUIRED)) {
@@ -60,9 +63,10 @@ public class BoshScanListener implements ScannerListener {
 
                 fatherTree.validateFolder(fileOutputFolder);
 
+                System.out.println(OUT_PUT_TYPE_PDF + " ouput");
+
                 switch (outPutFormat.toLowerCase()) {
                     case OUT_PUT_TYPE_PDF: {
-                        System.out.println(OUT_PUT_TYPE_PDF + " ouput");
                         //--
                         ImageManager.convertWriteToPdf(image, fileOutputFolder.getCanonicalPath() + "\\" + OUT_PUT_FILE_NAME + generateNewId() + "." + OUT_PUT_TYPE_PDF);
                         break;
@@ -79,7 +83,7 @@ public class BoshScanListener implements ScannerListener {
                         break;
                     }
                     default: {
-                        System.out.println("Intern Log : la opccion de formato de salida no es correcta");
+                        System.out.println("Intern Log : la opcion de formato de salida no es correcta");
                         break;
                     }
                 }

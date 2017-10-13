@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+
+        <input type='button' value='BoshTWAIN' onclick='exec()'>
+        
+        <script type="text/javascript" >
+            var scanRequest = {
+                "show_ui_dialog": "false",
+                "show_appi_interface_dialog": "false"
+            };
+
+            //--
+            function exec() {
+                var parentDocument = (window.parent) ? window.parent.document : window.document;
+                var docuemntChildElement = parentDocument.getElementById('customUrlLink');
+                if (docuemntChildElement) {
+                    docuemntChildElement.parentNode.removeChild(docuemntChildElement);
+                }
+                var linkElement = parentDocument.createElement('a');
+                //linkElement.href = 'boshprotocol://(argumentos1)'; {\"%1\""}
+                linkElement.href = 'boshprotocol://';
+                linkElement.innerHTML = "Link";
+                linkElement.setAttribute('id', 'customUrlLink');
+                linkElement.setAttribute("style", "display:none; ");
+                parentDocument.body.appendChild(linkElement);
+                submitRequest("customUrlLink");
+            }
+            function submitRequest(elementId) {
+                var parentDocument = (window.parent) ? window.parent.document : window.document;
+                if (parentDocument.getElementById(elementId) === null || parentDocument.getElementById(elementId) === undefined)
+                    return;
+                if (parentDocument.getElementById(elementId).dispatchEvent) {
+                    var event = parentDocument.createEvent("MouseEvents");
+                    event.initEvent("click", true, true);
+                    parentDocument.getElementById(elementId).dispatchEvent(event);
+                } else {
+                    parentDocument.getElementById(elementId).click();
+                }
+            }
+
+        </script>
+
+    </body>
+</html>

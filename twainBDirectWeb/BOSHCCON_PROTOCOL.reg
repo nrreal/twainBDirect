@@ -1,0 +1,15 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\Software\Classes\boshprotocol]
+@="URL:BoshTWAIN"
+"URL Protocol"=""
+
+[HKEY_LOCAL_MACHINE\Software\Classes\boshprotocol\DefaultIcon]
+@="boshprotocol.exe,1"
+
+[HKEY_LOCAL_MACHINE\Software\Classes\boshprotocol\shell]
+
+[HKEY_LOCAL_MACHINE\Software\Classes\boshprotocol\shell\open]
+
+[HKEY_LOCAL_MACHINE\Software\Classes\boshprotocol\shell\open\command]
+@="\"C:\\Users\\SOFTWARE1\\Desktop\\TBDv1.0.3\\twainscan.bat\" \"%1\""

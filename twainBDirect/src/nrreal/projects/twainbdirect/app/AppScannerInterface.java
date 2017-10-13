@@ -26,10 +26,8 @@ public class AppScannerInterface extends JFrame {
     private BoshScanListener boshScanListener;
 
     public static void main(String[] args) {
-        new AppScannerInterface().setVisible(true);
-    }
-
-    public void run(String arg0) {
+        //java -d32 -jar C:/Users/SOFTWARE1/Desktop/TBDv1.0.3/src/TwainBDirect.jar (argumentos)
+        //JOptionPane.showMessageDialog(null, args[0]);
         new AppScannerInterface().setVisible(true);
     }
 
