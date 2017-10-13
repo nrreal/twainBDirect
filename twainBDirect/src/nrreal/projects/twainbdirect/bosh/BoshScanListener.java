@@ -1,23 +1,17 @@
 package nrreal.projects.twainbdirect.bosh;
 
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.imageio.ImageReadParam;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
-import javax.swing.JOptionPane;
 import nrreal.projects.bosh.utils.FatherTree;
+import uk.co.mmscomputing.device.scanner.ScannerDevice;
+import uk.co.mmscomputing.device.scanner.ScannerIOException;
 import uk.co.mmscomputing.device.scanner.ScannerIOMetadata;
 import uk.co.mmscomputing.device.scanner.ScannerListener;
 
@@ -28,6 +22,7 @@ import uk.co.mmscomputing.device.scanner.ScannerListener;
 public class BoshScanListener implements ScannerListener {
 
     private final FatherTree fatherTree;
+    private static List<BufferedImage> bufferedImagesPdf;
     //--
     private static BufferedImage image;
     private static final String PATH = System.getProperty("user.home") + "\\Desktop\\" + "boshtwain4JImages\\";
@@ -36,6 +31,8 @@ public class BoshScanListener implements ScannerListener {
      */
     private static final String OUT_PUT_TYPE_JPG = "jpg";
     private static final String OUT_PUT_TYPE_PDF = "pdf";
+    private static final String OUT_PUT_TYPE_MULTIPLE_PDF = "pdf/m";
+    //--
     private static final String OUT_PUT_FILE_NAME = "twain4jOut";
     //--
     public static boolean FINISH_ALL_SCAN_PROCCES = false;
@@ -47,7 +44,13 @@ public class BoshScanListener implements ScannerListener {
 
     @Override
     public void update(ScannerIOMetadata.Type type, ScannerIOMetadata metadata) {
-        
+        ScannerDevice device = metadata.getDevice();
+        try {
+            device.setShowUserInterface(false);
+        } catch (ScannerIOException ex) {
+            System.out.println("error"+ex.getMessage());
+        }
+        //--
         if (type.equals(ScannerIOMetadata.ACQUIRED)) {
             File fileOutputFolder;
             try {
@@ -68,13 +71,20 @@ public class BoshScanListener implements ScannerListener {
                         normalImageFormatWrite(OUT_PUT_TYPE_JPG);
                         break;
                     }
-                    default:{
+                    case OUT_PUT_TYPE_MULTIPLE_PDF: {
+                        if (bufferedImagesPdf == null) {
+                            bufferedImagesPdf = new ArrayList<>();
+                        }
+                        bufferedImagesPdf.add(image);
+                        break;
+                    }
+                    default: {
                         System.out.println("Intern Log : la opccion de formato de salida no es correcta");
                         break;
                     }
                 }
 
-                FINISH_ALL_SCAN_PROCCES = true;
+                //FINISH_ALL_SCAN_PROCCES = true;
             } catch (IOException e) {
                 FatherTree.createNewLogFile(fatherTree.getCurrentFolder(), e.getMessage());
             }
@@ -91,6 +101,11 @@ public class BoshScanListener implements ScannerListener {
             }
              */
         } else if (type.equals(ScannerIOMetadata.STATECHANGE)) {
+            //--multiple iamgen en un pdf
+            if (metadata.getStateStr().contains("Source Enabled")) {
+                multiplePdfConverter();
+            }
+            //--
             //System.out.println("State Change ejec");
             //--
             System.err.println("State : " + metadata.getStateStr());
@@ -119,7 +134,22 @@ public class BoshScanListener implements ScannerListener {
                     FatherTree.createNewLogFile(fatherTree.getCurrentFolder(), "Ocurrio un error al intentar escribir el archivo");
                 }
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
+            FatherTree.createNewLogFile(fatherTree.getCurrentFolder(), "Ocurrio un error al intentar escribir el archivo");
+        }
+    }
+
+    private void multiplePdfConverter() {
+        if (outPutFormat != null) {
+            if (outPutFormat.toLowerCase().equals(OUT_PUT_TYPE_MULTIPLE_PDF)) {
+                if (bufferedImagesPdf != null) {
+                    if (!bufferedImagesPdf.isEmpty()) {
+                        ImageManager.convertWriteToMultiplePdf(bufferedImagesPdf, PATH + "\\" + OUT_PUT_FILE_NAME + generateNewId() + "." + OUT_PUT_TYPE_PDF);
+                        //--
+                        bufferedImagesPdf = null;
+                    }
+                }
+            }
         }
     }
 
@@ -135,7 +165,6 @@ public class BoshScanListener implements ScannerListener {
     }
 
     //--
-
     public String getOutPutFormat() {
         return outPutFormat;
     }
@@ -143,5 +172,5 @@ public class BoshScanListener implements ScannerListener {
     public void setOutPutFormat(String outPutFormat) {
         this.outPutFormat = outPutFormat;
     }
-    
+
 }

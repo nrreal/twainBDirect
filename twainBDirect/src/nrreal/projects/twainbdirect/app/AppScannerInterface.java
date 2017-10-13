@@ -5,7 +5,6 @@ import nrreal.projects.twainbdirect.bosh.BoshScanListener;
 import java.awt.HeadlessException;
 import java.awt.Rectangle;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -106,7 +105,7 @@ public class AppScannerInterface extends JFrame {
                     while (String.valueOf(formatoDeSalida).equals("Seleccione")) {
                         formatoDeSalida = JOptionPane.showInputDialog(null, "Seleccione una Opccion",
                                 "Formato De Salida", JOptionPane.QUESTION_MESSAGE, null,
-                                new Object[]{"Seleccione", "PDF", "JPG"}, "Seleccione");
+                                new Object[]{"Seleccione", "PDF", "JPG", "PDF/M"}, "Seleccione");
 
                         if (formatoDeSalida != null) {
                             if (boshScanListener != null) {

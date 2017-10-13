@@ -3,21 +3,13 @@ package nrreal.projects.twainbdirect.bosh;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Image;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfWriter;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import javafx.scene.shape.Path;
-import javax.imageio.ImageIO;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -48,6 +40,34 @@ public class ImageManager {
             //--
             document.close();
         } catch (DocumentException | IOException e) {
+            System.out.println("Intern Log : " + e.getMessage());
+        }
+    }
+
+    public static void convertWriteToMultiplePdf(List<BufferedImage> bufeBufferedImage, String path) {
+        List<Image> images;
+        try {
+
+            images = new ArrayList<>();
+
+            for (BufferedImage bufferedImage : bufeBufferedImage) {
+                images.add(Image.getInstance(bufferedImage, null));
+            }
+            
+            Document document = new Document(images.get(0));
+            
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(path));
+            //--
+            document.open();
+            images.get(0).setAbsolutePosition(0, 0);
+            //--
+            for (Image image : images) {
+                document.newPage();
+                document.add(image);
+            }
+            //--
+            document.close();
+        } catch (Exception e) {
             System.out.println("Intern Log : " + e.getMessage());
         }
     }

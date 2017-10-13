@@ -15,9 +15,10 @@ public class AppDev {
     private static final String ARCHITECTURE_X32 = "32";
     private static final String NAME = "jtwain.dll";
 
+    /*
     public static void main(String[] args) {
         testScan();
-    }
+    }*/
 
     private static void testScan() {
         try {
