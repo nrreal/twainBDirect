@@ -1,4 +1,4 @@
-package nrreal.projects.twainbdirect.bosh;
+package nrreal.projects.twainbdirect.bosh.scan;
 
 /**
  *

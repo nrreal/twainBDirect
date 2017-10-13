@@ -1,7 +1,7 @@
 package nrreal.projects.twainbdirect.app;
 
-import nrreal.projects.twainbdirect.bosh.BoshScan;
-import nrreal.projects.twainbdirect.bosh.BoshScanListener;
+import nrreal.projects.twainbdirect.bosh.scan.BoshScan;
+import nrreal.projects.twainbdirect.bosh.scan.BoshScanListener;
 import java.awt.HeadlessException;
 import java.awt.Rectangle;
 import javax.swing.JButton;

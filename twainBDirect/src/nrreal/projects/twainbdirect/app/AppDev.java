@@ -1,6 +1,6 @@
 package nrreal.projects.twainbdirect.app;
 
-import nrreal.projects.twainbdirect.bosh.BoshScan;
+import nrreal.projects.twainbdirect.bosh.scan.BoshScan;
 import org.omg.CORBA.SystemException;
 import uk.co.mmscomputing.device.scanner.ScannerIOException;
 
